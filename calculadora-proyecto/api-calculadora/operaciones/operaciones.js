@@ -23,8 +23,21 @@ function multiply(a, b){
     return number1 * number2;
 }
 
+function divide(a, b) {
+    let number1 = parseFloat(a);
+    let number2 = parseFloat(b);
+
+    if (number2 === 0) {
+        throw new Error("No se puede dividir por cero");
+    }
+
+    return number1 / number2;
+}
+
+
 module.exports = {
     add,
     subtract,
-    multiply
+    multiply,
+    divide
 }
