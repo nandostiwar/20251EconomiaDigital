@@ -22,9 +22,15 @@ function multiply(a, b){
     let number2 = parseInt(b);
     return number1 * number2;
 }
+function split (a, b){
+    let number1 = parseInt(a);
+    let number2 = parseInt(b);
+    return number1 / number2;
+}
 
 module.exports = {
     add,
     subtract,
-    multiply
+    multiply,
+    split
 }
