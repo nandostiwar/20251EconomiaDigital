@@ -13,4 +13,5 @@ app.use('/v1/calculadora', router);
 
 app.listen(3500, ()=>{
     console.log("Listening at port 3500");
+    console.log("se conectó");
 })
