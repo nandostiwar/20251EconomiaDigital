@@ -1,4 +1,4 @@
-const {add, subtract, multiply,split} = require('../operaciones/operaciones.js');
+const {add, subtract, multiply, split} = require('../operaciones/operaciones.js');
 
 function sumar(req, res){
     const {body} = req;
@@ -29,7 +29,7 @@ function multiplicar(req, res){
 function dividir(req, res){
     const {body} = req;
     const {number1, number2} = body;
-    const result = dividir(number1, number2);
+    const result = split(number1, number2);
     res.json({
         resultado: result
     })
