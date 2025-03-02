@@ -23,8 +23,8 @@ function multiply(a, b){
     return number1 * number2;
 }
 function split (a, b){
-    let number1 = parseFloat(a);
-    let number2 = parseFloat(b);
+    let number1 = parseInt(a);
+    let number2 = parseInt(b);
     return number1 / number2;
 }
 
