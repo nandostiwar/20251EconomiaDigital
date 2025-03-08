@@ -18,8 +18,7 @@ function Calculadora(){
             .then(res =>res.json())
             .then(responseData => {
                 setResultado(responseData.resultado)
-                // setResultado(responseData)
-                // console.log(resultado)
+                
             })
     }
 
@@ -32,6 +31,7 @@ function Calculadora(){
                 <input type="submit" className="btnEnviar" value="sumar" onClick={handleSubmit}/>
                 <input type="submit" className="btnEnviar" value="restar" onClick={handleSubmit}/>
                 <input type="submit" className="btnEnviar" value="multiplicar" onClick={handleSubmit}/>
+                <input type="submit" className="btnEnviar" value="dividir" onClick={handleSubmit}/>
             </form>
             <Resultado resultado={"El resultado es "+ resultado}/>
         </div>
