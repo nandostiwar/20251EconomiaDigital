@@ -12,7 +12,7 @@ mongoose.connect('mongodb+srv://allrg1104:vL4leF1sPmgI5w2Z@cluster0.xtqyw.mongod
   useUnifiedTopology: true
 });
 
-// Definir esquema y modelo
+// Definir esquema y modelo para ventas ====> IMPORTANTE
 const ventaSchema = new mongoose.Schema({
   nombre: String,
   producto: String
@@ -29,6 +29,30 @@ app.post('/ventas', async (req, res) => {
     res.status(201).json(nuevaVenta);
   } catch (error) {
     res.status(500).json({ error: 'Error al crear la venta' });
+  }
+});
+
+
+// Definir esquema y modelo para usuarios ====> IMPORTANTE
+const usuariosSchema = new mongoose.Schema({
+    nombre: String,
+    cedula: String,
+    correo: String,
+    direccion: String,
+    telefono: String
+});
+
+const usuarios = mongoose.model('Usuarios', usuariosSchema);
+
+// Ruta para crear un usuario
+app.post('/usuarios', async (req, res) => {
+  try {
+    const { nombre, cedula, correo, direccion, telefono } = req.body;
+    const nuevoUsuarios = new usuarios({ nombre, cedula, correo, direccion, telefono });
+    await nuevoUsuarios.save();
+    res.status(201).json(nuevoUsuarios);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al crear el usuario' });
   }
 });
 
