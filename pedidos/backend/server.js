@@ -7,10 +7,19 @@ app.use(express.json());
 app.use(cors());
 
 // Conexión a MongoDB
-mongoose.connect('mongodb+srv://sajoesor:Qp76W4Fhuh9DIFbh@cluster0.fenw8.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect('mongodb+srv://sajoesor:Qp76W4Fhuh9DIFbh@cluster0.fenw8.mongodb.net/INVENTARIO?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
+
+mongoose.connection.on('connected', () => {
+  console.log('✅ Conectado a MongoDB');
+});
+
+mongoose.connection.on('error', (err) => {
+  console.error('❌ Error en la conexión a MongoDB:', err);
+});
+
 
 // Definir esquema y modelo
 const ventaSchema = new mongoose.Schema({
