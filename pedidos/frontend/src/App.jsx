@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 
 function App() {
+  const [correo, setCorreo] = useState('');
+  const [direccion, setDireccion] = useState('');
+  const [telefono, setTelefono] = useState('');
   const [nombre, setNombre] = useState('');
   const [producto, setProducto] = useState('');
   const [ventas, setVentas] = useState([]);
@@ -20,31 +23,69 @@ function App() {
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-      const response = await fetch('http://localhost:5000/ventas', {
+      const responseVentas = await fetch('http://localhost:5000/ventas', {
       //const response = await fetch('https://rk0k46fr-5000.use.devtunnels.ms/ventas', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ nombre, producto })
     });
 
-    if (response.ok) {
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+        const responseClientes = await fetch('http://localhost:5000/clientes', {
+        //const response = await fetch('https://rk0k46fr-5000.use.devtunnels.ms/ventas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nombre, correo, direccion, telefono })
+      });
+
+    if (responseVentas.ok && responseClientes.ok) {
       fetchVentas(); // Actualizar la lista
       setNombre('');
       setProducto('');
+      setDireccion('');
+      setTelefono('');
+      setCorreo('');
+
     }
+  }
   };
 
   return (
     <div>
       <h2>Crear Pedido</h2>
       <form onSubmit={handleSubmit}>
-        <input 
+
+      <input 
           type="text" 
           placeholder="Nombre" 
           value={nombre} 
           onChange={(e) => setNombre(e.target.value)} 
           required 
         />
+
+        <input 
+          type="text" 
+          placeholder="Dirección " 
+          value={direccion} 
+          onChange={(e) => setDireccion(e.target.value)} 
+          required 
+        />
+        <input 
+          type="text" 
+          placeholder="Telefono" 
+          value={telefono} 
+          onChange={(e) => setTelefono(e.target.value)} 
+          required 
+        />
+        <input 
+          type="text" 
+          placeholder="Correo" 
+          value={correo} 
+          onChange={(e) => setCorreo(e.target.value)} 
+          required
+        />
+        
         <input 
           type="text" 
           placeholder="Producto" 

@@ -41,6 +41,31 @@ app.post('/ventas', async (req, res) => {
   }
 });
 
+// Definir esquema y modelo para Clientes
+const clientesSchema = new mongoose.Schema({
+  nombre: String,
+  correo: String,
+  direccion: String,
+  telefono: String,
+});
+
+const Cliente = mongoose.model('Cliente', ventaSchema);
+
+// Ruta para crear una venta
+app.post('/clientes', async (req, res) => {
+  try {
+    const { nombre, correo, direccion, telefono } = req.body;
+    const nuevoCliente = new Cliente({ nombre, correo, direccion, telefono });
+    await nuevoCliente.save();
+    res.status(201).json(nuevoCliente);
+  } catch (error) {
+    res.status(500).json({ error: 'Error al crear cliente' });
+  }
+});
+
+
+
+
 // Ruta para obtener todas las ventas
 app.get('/ventas', async (req, res) => {
   try {
