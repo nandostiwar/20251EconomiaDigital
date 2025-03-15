@@ -49,7 +49,7 @@ const clientesSchema = new mongoose.Schema({
   telefono: String,
 });
 
-const Cliente = mongoose.model('Cliente', ventaSchema);
+const Cliente = mongoose.model('Cliente', clientesSchema);
 
 // Ruta para crear una venta
 app.post('/clientes', async (req, res) => {

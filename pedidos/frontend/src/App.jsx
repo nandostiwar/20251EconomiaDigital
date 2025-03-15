@@ -11,7 +11,6 @@ function App() {
   // Función para obtener las ventas
   const fetchVentas = async () => {
     const response = await fetch('http://localhost:5000/ventas');
-    //const response = await fetch('https://rk0k46fr-5000.use.devtunnels.ms/ventas');
     const data = await response.json();
     setVentas(data);
   };
@@ -23,32 +22,34 @@ function App() {
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
-      const responseVentas = await fetch('http://localhost:5000/ventas', {
-      //const response = await fetch('https://rk0k46fr-5000.use.devtunnels.ms/ventas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, producto })
-    });
 
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-        const responseClientes = await fetch('http://localhost:5000/clientes', {
-        //const response = await fetch('https://rk0k46fr-5000.use.devtunnels.ms/ventas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, correo, direccion, telefono })
-      });
+    try {
+      const [responseVentas, responseClientes] = await Promise.all([
+        fetch('http://localhost:5000/ventas', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, producto })
+        }),
+        fetch('http://localhost:5000/clientes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, correo, direccion, telefono })
+        })
+      ]);
 
-    if (responseVentas.ok && responseClientes.ok) {
-      fetchVentas(); // Actualizar la lista
-      setNombre('');
-      setProducto('');
-      setDireccion('');
-      setTelefono('');
-      setCorreo('');
-
+      if (responseVentas.ok && responseClientes.ok) {
+        fetchVentas(); // Actualizar la lista
+        setNombre('');
+        setProducto('');
+        setDireccion('');
+        setTelefono('');
+        setCorreo('');
+      } else {
+        console.error("Error en las respuestas del servidor.");
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
     }
-  }
   };
 
   return (
@@ -56,7 +57,7 @@ function App() {
       <h2>Crear Pedido</h2>
       <form onSubmit={handleSubmit}>
 
-      <input 
+        <input 
           type="text" 
           placeholder="Nombre" 
           value={nombre} 
