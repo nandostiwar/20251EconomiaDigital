@@ -7,9 +7,8 @@ app.use(express.json());
 app.use(cors());
 
 // Conexión a MongoDB
-mongoose.connect('mongodb+srv://estebancastano01:xH0G03GGAdOez3tv@cluster2025.ndydq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster2025', {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
+mongoose.connect('mongodb+srv://estebancastano01:fBdpbAVX8WmfPmdS@cluster2025.ndydq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster2025', {
+  
 });
 
 // Definir esquema y modelo
