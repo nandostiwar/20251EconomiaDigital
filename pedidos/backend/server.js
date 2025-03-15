@@ -20,6 +20,14 @@ const ventaSchema = new mongoose.Schema({
 
 const Venta = mongoose.model('Venta', ventaSchema);
 
+// Esquema de clientes
+const clienteSchema = new mongoose.Schema({
+  direccion: String,
+  telefono: String,
+  correo: String
+});
+const Cliente = mongoose.model('Cliente', clienteSchema);
+
 // Ruta para crear una venta
 app.post('/ventas', async (req, res) => {
   try {

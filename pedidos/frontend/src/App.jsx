@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 function App() {
   const [nombre, setNombre] = useState('');
+  const [direccion, setDireccion] = useState('');
+  const [telefono, setTelefono] = useState('');
+  const [correo, setCorreo] = useState('');
   const [producto, setProducto] = useState('');
   const [ventas, setVentas] = useState([]);
 
@@ -30,12 +33,16 @@ function App() {
     if (response.ok) {
       fetchVentas(); // Actualizar la lista
       setNombre('');
+      setDireccion('');
+      setTelefono('');
+      setCorreo('');
       setProducto('');
     }
   };
 
   return (
     <div>
+      
       <h2>Crear Pedido</h2>
       <form onSubmit={handleSubmit}>
         <input 
@@ -44,6 +51,24 @@ function App() {
           value={nombre} 
           onChange={(e) => setNombre(e.target.value)} 
           required 
+        />
+        <input type="text"
+        placeholder="Direccion"
+        value={direccion}
+        onChange={(e) => setDireccion(e.target.value)} 
+        required 
+        />
+        <input type="text"
+        placeholder="Telefono"
+        value={telefono}
+        onChange={(e) => setTelefono(e.target.value)} 
+        required 
+        />
+        <input type="text"
+        placeholder="Correo"
+        value={correo}
+        onChange={(e) => setCorreo(e.target.value)} 
+        required 
         />
         <input 
           type="text" 
