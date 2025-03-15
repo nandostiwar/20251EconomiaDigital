@@ -42,13 +42,13 @@ const usuariosSchema = new mongoose.Schema({
     telefono: String
 });
 
-const usuarios = mongoose.model('Usuarios', usuariosSchema);
+const Usuarios = mongoose.model('Usuarios', usuariosSchema);
 
 // Ruta para crear un usuario
 app.post('/usuarios', async (req, res) => {
   try {
     const { nombre, cedula, correo, direccion, telefono } = req.body;
-    const nuevoUsuarios = new usuarios({ nombre, cedula, correo, direccion, telefono });
+    const nuevoUsuarios = new Usuarios({ nombre, cedula, correo, direccion, telefono });
     await nuevoUsuarios.save();
     res.status(201).json(nuevoUsuarios);
   } catch (error) {

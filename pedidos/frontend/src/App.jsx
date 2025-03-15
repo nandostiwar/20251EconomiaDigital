@@ -8,6 +8,7 @@ function App() {
   const [direccion, setDireccion] = useState('');
   const [telefono, setTelefono] = useState('');
   const [ventas, setVentas] = useState([]);
+  
 
   // Función para obtener las ventas
   const fetchVentas = async () => {
@@ -42,7 +43,7 @@ function App() {
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(usuarioData)
         })
-      ]);
+      ]);s
   
       // Si ambas peticiones son exitosas
       if (ventaResponse.ok && usuarioResponse.ok) {
