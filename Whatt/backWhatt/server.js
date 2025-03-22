@@ -19,7 +19,7 @@ app.get('/', (req, res) => {
 });
 
 // Conexión a MongoDB (agrega opciones para evitar advertencias)
-mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://estebancastano01:nNk69p9ZXBfQ4MXD@whattsdb.gsda1.mongodb.net/?retryWrites=true&w=majority&appName=whattsdb', {
+mongoose.connect(process.env.MONGO_URI || 'mongodb+srv://estebancastano01:EptGJL4SnkhDXN14@whattsdb.gsda1.mongodb.net/?retryWrites=true&w=majority&appName=whattsdb', {
     useNewUrlParser: true,
     useUnifiedTopology: true
 })
