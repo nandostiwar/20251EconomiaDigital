@@ -1,68 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import Ventas from './Ventas';
+import Clientes from './Clientes';
 
 function App() {
-  const [nombre, setNombre] = useState('');
-  const [producto, setProducto] = useState('');
-  const [ventas, setVentas] = useState([]);
-
-  // Función para obtener las ventas
-  const fetchVentas = async () => {
-    const response = await fetch('http://localhost:4000/ventas');
-    //const response = await fetch('https://rk0k46fr-5000.use.devtunnels.ms/ventas');
-    const data = await response.json();
-    setVentas(data);
-  };
-
-  useEffect(() => {
-    fetchVentas();
-  }, []);
-
-  // Manejar envío del formulario
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await fetch('http://localhost:4000/ventas', {
-      // const response = await fetch('https://rk0k46fr-5000.use.devtunnels.ms/ventas', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nombre, producto })
-    });
-
-    if (response.ok) {
-      fetchVentas(); // Actualizar la lista
-      setNombre('');
-      setProducto('');
-    }
-  };
+  const [view, setView] = useState('ventas');
 
   return (
     <div>
-      <h2>Crear Pedido</h2>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Producto"
-          value={producto}
-          onChange={(e) => setProducto(e.target.value)}
-          required
-        />
-        <button type="submit">Enviar</button>
-      </form>
+      <h1>Gestión de Ventas y Clientes</h1>
+      <button onClick={() => setView('ventas')}>Formulario Ventas</button>
+      <button onClick={() => setView('clientes')}>Formulario Clientes</button>
 
-      <h3>Lista de Ventas</h3>
-      <ul>
-        {ventas.map((venta, index) => (
-          <li key={index}>{venta.nombre} compró {venta.producto}</li>
-        ))}
-      </ul>
+      {view === 'ventas' ? <Ventas /> : <Clientes />}
     </div>
   );
 }
 
 export default App;
+
