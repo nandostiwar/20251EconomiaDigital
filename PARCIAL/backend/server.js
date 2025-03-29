@@ -7,7 +7,7 @@ app.use(express.json());
 app.use(cors());
 
 // Conexión a MongoDB Atlas
-mongoose.connect('mongodb+srv://sajoesor:Qp76W4Fhuh9DIFbh@cluster0.fenw8.mongodb.net/WHATSAPP?retryWrites=true&w=majority&appName=Cluster0', {
+mongoose.connect('mongodb+srv://sajoesor:Qp76W4Fhuh9DIFbh@cluster0.fenw8.mongodb.net/PARCIAL?retryWrites=true&w=majority&appName=Cluster0', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -20,57 +20,86 @@ mongoose.connection.on('error', (err) => {
   console.error('❌ Error en la conexión a MongoDB:', err);
 });
 
-// Definir esquema y modelo para Usuarios
-const usersSchema = new mongoose.Schema({
-  nombre: String,
-  telefono: String
+// Modelo de Usuario
+const UserSchema = new mongoose.Schema({
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true }
 });
 
-const User = mongoose.model('User', usersSchema);
+const User = mongoose.model('User', UserSchema);
 
-// Ruta para registrar un usuario
+// Modelo de Venta
+const SaleSchema = new mongoose.Schema({
+  cedula: { type: String, required: true },
+  estado: { type: String, required: true, enum: ["Aprobado", "Rechazado"] },
+  fecha: { type: Date, default: Date.now },
+  nombre: { type: String, required: true },
+  producto: { type: String, required: true },
+  telefono: { type: String, required: true },
+  valor: { type: Number, required: true }
+});
+
+const Sale = mongoose.model('Sale', SaleSchema);
+
+// Registrar Usuario
 app.post('/users', async (req, res) => {
   try {
-    const { nombre, telefono } = req.body;
-    const nuevoUser = new User({ nombre, telefono });
-    await nuevoUser.save();
-    res.status(201).json(nuevoUser);
+    const { email, password } = req.body;
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+    }
+
+    const userExists = await User.findOne({ email });
+    if (userExists) {
+      return res.status(400).json({ message: 'El usuario ya existe' });
+    }
+
+    const newUser = new User({ email, password });
+    await newUser.save();
+    res.status(201).json({ message: 'Usuario registrado con éxito' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear usuario' });
+    res.status(500).json({ message: 'Error al registrar usuario', error });
   }
 });
 
-// Definir esquema y modelo para Mensajes
-const mensajesSchema = new mongoose.Schema({
-  origen: String,
-  destino: String,
-  mensaje: String
-});
-
-const Mensaje = mongoose.model('Mensaje', mensajesSchema);
-
-// Ruta para enviar un mensaje
-app.post('/mensajes', async (req, res) => {
+// Iniciar Sesión
+app.post('/login', async (req, res) => {
   try {
-    const { origen, destino, mensaje } = req.body;
-    const nuevoMensaje = new Mensaje({ origen, destino, mensaje });
-    await nuevoMensaje.save();
-    res.status(201).json(nuevoMensaje);
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user || user.password !== password) {
+      return res.status(400).json({ message: 'Credenciales inválidas' });
+    }
+    res.json({ message: 'Inicio de sesión exitoso', userId: user._id });
   } catch (error) {
-    res.status(500).json({ error: 'Error al enviar mensaje' });
+    res.status(500).json({ message: 'Error en el login', error });
   }
 });
 
-// Ruta para obtener todos los mensajes
-app.get('/mensajes', async (req, res) => {
+// Registrar Venta
+app.post('/sales', async (req, res) => {
   try {
-    const mensajes = await Mensaje.find();
-    res.status(200).json(mensajes);
+    const { cedula, estado, nombre, producto, telefono, valor } = req.body;
+    if (!cedula || !estado || !nombre || !producto || !telefono || !valor) {
+      return res.status(400).json({ message: 'Todos los campos son obligatorios' });
+    }
+    const nuevaVenta = new Sale({ cedula, estado, nombre, producto, telefono, valor });
+    await nuevaVenta.save();
+    res.status(201).json({ message: 'Venta registrada con éxito', venta: nuevaVenta });
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener mensajes' });
+    res.status(500).json({ message: 'Error al registrar la venta', error });
   }
 });
 
-// Iniciar servidor
+// Obtener todas las ventas
+app.get('/sales', async (req, res) => {
+  try {
+    const ventas = await Sale.find();
+    res.json(ventas);
+  } catch (error) {
+    res.status(500).json({ message: 'Error al obtener ventas', error });
+  }
+});
+
 const PORT = 5000;
 app.listen(PORT, () => console.log(`🚀 Servidor corriendo en el puerto ${PORT}`));

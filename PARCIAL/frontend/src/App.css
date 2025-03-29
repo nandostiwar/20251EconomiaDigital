@@ -1,42 +1,341 @@
-#root {
-  max-width: 1280px;
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+  background-color: #f5f7fa;
+  color: #333;
+  line-height: 1.6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Contenedor principal para formularios */
+.container {
+  width: 100%;
+  max-width: 400px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Títulos */
+h2 {
+  color: #2c3e50;
+  margin-bottom: 25px;
+  font-weight: 600;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+h3 {
+  color: #2c3e50;
+  margin: 20px 0;
+  font-weight: 500;
+  text-align: center;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+/* Formularios */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 100%;
+  align-items: center;
+}
+
+input {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+  transition: border-color 0.3s;
+  width: 100%;
+  background-color: white;
+  color: #4a5568;
+  margin-bottom: 10px;
+}
+
+input::placeholder {
+  color: #a0aec0;
+}
+
+input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+button {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+button:hover {
+  background-color: #2980b9;
+}
+
+/* Botones secundarios */
+#createUser,
+#CreateAdmin {
+  background-color: #ecf0f1;
+  color: #2c3e50;
+  margin-top: 5px;
+}
+
+#createUser:hover,
+#CreateAdmin:hover {
+  background-color: #dfe6e9;
+}
+
+/* Enlaces de texto */
+.link-text {
+  color: #3498db;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link-text:hover {
+  color: #2980b9;
+}
+
+/* Mensajes de error */
+p[style*="color: red"] {
+  margin-top: 15px;
+  font-size: 14px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Sección de compras */
+.compras-container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  position: relative;
+  top: 0;
+  transform: none;
+  left: auto;
+}
+
+/* Contenedor para los inputs y el botón */
+.compras-container {
+  position: relative;
+}
+
+.compras-container > input:first-of-type {
+  width: 40%;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.compras-container > input:nth-of-type(2) {
+  width: 40%;
+  display: inline-block;
+}
+
+/* Botón de pagar específico (antes de la pasarela) */
+.compras-container > button {
+  width: 15%;
+  max-width: none;
+  display: inline-block;
+  vertical-align: middle;
+  margin: 0;
+  height: 45px;
+  padding: 0 15px;
+}
+
+/* Limpiar el float después del botón */
+.compras-container > h3 {
+  clear: both;
+  padding-top: 20px;
+  margin-top: 30px;
+}
+
+/* Tabla de historial de compras */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px auto 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  clear: both;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #eee;
+}
+
+th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Estilos para los estados de pago */
+td:nth-child(4) {
+  padding: 8px 12px;
+}
+
+/* Estilos específicos para los estados */
+.estado-aprobado {
+  background-color: #4ade80;
+  color: white;
+  border-radius: 5px;
+  font-weight: 500;
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+.estado-rechazado {
+  background-color: #f87171;
+  color: white;
+  border-radius: 5px;
+  font-weight: 500;
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+/* Modal de pasarela de pago */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  width: 90%;
+  max-width: 500px;
+}
+
+.modal-content h2 {
+  margin-bottom: 20px;
+}
+
+.modal-content input {
+  margin-bottom: 15px;
+}
+
+/* Botones dentro del modal */
+.modal-content button {
+  width: 100%;
+  max-width: none;
+  float: none;
+  display: block;
+}
+
+.modal-content button:last-child {
+  background-color: #e74c3c;
+}
+
+.modal-content button:last-child:hover {
+  background-color: #c0392b;
+}
+
+/* Mensaje de confirmación */
+.compras-container > p {
+  margin: 15px 0;
+  padding: 10px;
+  border-radius: 5px;
+  text-align: center;
+  background-color: #f8f9fa;
+  border-left: 4px solid #3498db;
+  clear: both;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .container {
+    width: 90%;
+    padding: 20px;
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    margin: 50px auto;
   }
-  to {
-    transform: rotate(360deg);
+
+  .compras-container {
+    width: 90%;
+    padding: 20px;
+    margin: 50px auto;
+  }
+
+  .compras-container > input:first-of-type,
+  .compras-container > input:nth-of-type(2) {
+    width: 100%;
+    margin-right: 0;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .compras-container > button {
+    width: 100%;
+    display: block;
+    margin-bottom: 20px;
+    height: auto;
+  }
+
+  body {
+    display: block;
+    padding: 0;
+  }
+
+  table {
+    font-size: 14px;
+  }
+
+  th,
+  td {
+    padding: 10px;
+  }
+
+  .modal-content {
+    width: 95%;
+    padding: 20px;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
