@@ -23,7 +23,9 @@ mongoose.connection.on('error', (err) => {
 // Modelo de Usuario
 const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  rol: { type: String, required: true, enum: ["Admin", "User"] } // Agregamos el rol
+
 });
 
 const User = mongoose.model('User', UserSchema);
@@ -44,8 +46,8 @@ const Sale = mongoose.model('Sale', SaleSchema);
 // Registrar Usuario
 app.post('/users', async (req, res) => {
   try {
-    const { email, password } = req.body;
-    if (!email || !password) {
+    const { email, password, rol } = req.body;
+    if (!email || !password || rol) {
       return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
@@ -54,7 +56,7 @@ app.post('/users', async (req, res) => {
       return res.status(400).json({ message: 'El usuario ya existe' });
     }
 
-    const newUser = new User({ email, password });
+    const newUser = new User({ email, password, rol });
     await newUser.save();
     res.status(201).json({ message: 'Usuario registrado con éxito' });
   } catch (error) {
