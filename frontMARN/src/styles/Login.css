@@ -1,0 +1,69 @@
+/* Estilos generales para centrar el formulario */
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la pantalla */
+    background-color: #f4f4f4;
+  }
+  
+  /* Caja del formulario */
+  .login-box {
+    width: 350px;
+    padding: 20px;
+    background: white;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  /* Estilos del título */
+  .login-box h2 {
+    margin-bottom: 15px;
+    color: #333;
+  }
+  
+  /* Inputs de usuario y contraseña */
+  .login-box input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  /* Botón de login */
+  .login-box button {
+    width: 100%;
+    padding: 10px;
+    background: black;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .login-box button:hover {
+    background: #333;
+  }
+  
+  /* Links para registro */
+  .register-links {
+    margin-top: 15px;
+  }
+  
+  .register-links a {
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+  }
+  
+  .register-links a:hover {
+    text-decoration: underline;
+  }
+  
