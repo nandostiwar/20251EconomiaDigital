@@ -3,33 +3,38 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './styles/UserHome.css';
 
-const fetchCodes = async () => {
+// Función para obtener TODAS las ventas
+const fetchVentas = async () => {
   try {
     const response = await axios.get('http://localhost:5000/v1/drivers/Venta');
-    return response.data;
+    return response.data; // Retorna todas las ventas
   } catch (error) {
-    console.error('Error al obtener los códigos:', error);
+    console.error('Error al obtener las ventas:', error);
     return [];
   }
 };
 
 function UserHome() {
-  const [user, setUser] = useState({ nombre: '', correo: '', numeroCelular: '', ciudad: '' });
+  const [user, setUser] = useState({ nombre: '', correo: '' });
   const [producto, setProducto] = useState('');
   const [valor, setValor] = useState('');
-  const [codes, setCodes] = useState([]);
+  const [ventas, setVentas] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Carga el usuario guardado en localStorage (sin validaciones)
     const usuarioGuardado = localStorage.getItem('usuario');
     if (usuarioGuardado) {
       setUser(JSON.parse(usuarioGuardado));
     }
-    const loadCodes = async () => {
-      const codesData = await fetchCodes();
-      setCodes(codesData);
+
+    // Carga TODAS las ventas sin filtro
+    const loadVentas = async () => {
+      const ventasData = await fetchVentas();
+      setVentas(ventasData);
     };
-    loadCodes();
+
+    loadVentas();
   }, []);
 
   const handlePayment = () => {
@@ -49,6 +54,7 @@ function UserHome() {
 
         <main className="main-content">
           <h1 className="welcome">¡Bienvenido {user.nombre}!</h1>
+
           <section className="user-info">
             <h2>Información del Usuario</h2>
             <table>
@@ -74,19 +80,29 @@ function UserHome() {
             <h2>Historial de Compras</h2>
             <table>
               <thead>
-                <tr><th>Fecha de Registro</th><th>Número de Código</th><th>Estado</th></tr>
+                <tr><th>Fecha de Registro</th><th>Producto</th><th>Valor</th></tr>
               </thead>
               <tbody>
-                {codes.map((code, index) => (
-                  <tr key={index}><td>{code.fechaRegistro}</td><td>{code.numeroCodigo}</td><td>{code.estado}</td></tr>
-                ))}
+                {ventas.length > 0 ? (
+                  ventas.map((venta, index) => (
+                    <tr key={index}>
+                      <td>{new Date(venta.fechaReg).toLocaleDateString()}</td>
+                      <td>{venta.producto}</td>
+                      <td>{venta.valor}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="3">No hay compras registradas</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </section>
         </main>
 
         <footer className="footer">
-          <p>&copy; 2024 Gana Como Loco Colombia. Todos los derechos reservados.</p>
+          <p>&copy; 2025 MarketPlace. Todos los derechos reservados.</p>
         </footer>
       </div>
     </div>

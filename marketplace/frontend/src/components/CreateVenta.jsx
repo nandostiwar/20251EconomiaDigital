@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import axios from 'axios';
 import './styles/CreateVenta.css';
 
@@ -15,6 +14,20 @@ const CreateVenta = () => {
   const [tarjeta, setTarjeta] = useState('');
   const [fechaV, setFechaV] = useState('');
   const [ccv, setCcv] = useState('');
+  const [userID, setUserID] = useState('');
+  const [fechaRegistro, setFechaRegistro] = useState('');
+
+  useEffect(() => {
+    
+    const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
+    if (usuarioGuardado) {
+      setUserID(usuarioGuardado.id || ''); 
+    }
+
+   
+    const fechaActual = new Date().toISOString().slice(0, 19).replace('T', ' ');
+    setFechaRegistro(fechaActual);
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,6 +41,8 @@ const CreateVenta = () => {
         tarjeta,
         fechaV,
         ccv,
+        userID,  
+        fechaRegistro, 
       });
       alert('Venta registrada exitosamente');
       navigate('/userHome');
@@ -47,6 +62,9 @@ const CreateVenta = () => {
         <label>Valor:</label>
         <input type='text' value={valor} disabled />
 
+        <label>Fecha de Registro:</label>
+        <input type='text' value={fechaRegistro} disabled />
+
         <label>Nombre:</label>
         <input type='text' value={nombre} onChange={(e) => setNombre(e.target.value)} required />
 
@@ -63,7 +81,7 @@ const CreateVenta = () => {
         <input type='text' value={fechaV} onChange={(e) => setFechaV(e.target.value)} required />
 
         <label>CCV:</label>
-        <input type='text' value={ccv} onChange={(e) => setCcv(e.target.value)} required className="form-group" />
+        <input type='text' value={ccv} onChange={(e) => setCcv(e.target.value)} required />
 
         <div className="button-group">
           <button type="button" onClick={() => navigate('/UserHome')}>Regresar</button>

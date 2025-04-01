@@ -7,7 +7,7 @@ function CreateAdmin() {
     const [correo, setCorreo] = useState('');
     const [nombre, setNombre] = useState('');
     const [contrasena, setContrasena] = useState('');
-    const [rol, setRol] = useState('admin');
+    const [rol] = useState('admin'); // El rol siempre será "admin"
     const [showPassword, setShowPassword] = useState(false);
     const [successMessage, setSuccessMessage] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
@@ -28,12 +28,20 @@ function CreateAdmin() {
 
             if (response.data.success) {
                 setSuccessMessage('Usuario Administrador creado exitosamente');
+                
+                // Limpiar los campos después del registro
+                setCorreo('');
+                setNombre('');
+                setContrasena('');
+
+                // Redirigir después de 2 segundos
+                setTimeout(() => navigate('/'), 2000);
             } else {
                 setErrorMessage(response.data.message || 'Error en la creación de usuario');
             }
         } catch (error) {
             console.error('Error:', error);
-            setErrorMessage('Error en la solicitud: ' + error.message);
+            setErrorMessage(error.response?.data?.message || 'Error en la solicitud');
         }
     };
 
@@ -47,6 +55,7 @@ function CreateAdmin() {
                             type="text"
                             id="inputNombre"
                             placeholder="Nombre completo"
+                            value={nombre}
                             onChange={(e) => setNombre(e.target.value)}
                             required
                         />
@@ -55,6 +64,7 @@ function CreateAdmin() {
                                 type="text"
                                 id="inputUsername"
                                 placeholder="Correo"
+                                value={correo}
                                 onChange={(e) => setCorreo(e.target.value)}
                                 required
                             />
@@ -64,24 +74,25 @@ function CreateAdmin() {
                                 type={showPassword ? "text" : "password"}
                                 id="inputPassword"
                                 placeholder="Contraseña"
+                                value={contrasena}
                                 onChange={(e) => setContrasena(e.target.value)}
                                 required
                             />
                         </div>
                         <div className="checkbox">
-                        <label type="checkbox" onClick={() => setShowPassword(!showPassword)}>
-                            {showPassword ? "Ocultar" : "Mostrar"} Contraseña
-                        </label>
+                            <label type="checkbox" onClick={() => setShowPassword(!showPassword)}>
+                                {showPassword ? "Ocultar" : "Mostrar"} Contraseña
+                            </label>
                         </div>
-                    <button type="submit" id="btnCreateUser"  >Crear Usuario</button>
-                    <button type="button" id="btnCreateUser" onClick={() => navigate('/')}>
-                        Regresar
-                    </button>
-                    {successMessage && <p className="success">{successMessage}</p>}
-                    {errorMessage && <p className="error">{errorMessage}</p>}
-                </div>
-            </form>
-        </div>
+                        <button type="submit" id="btnCreateUser">Crear Usuario</button>
+                        <button type="button" id="btnCreateUser" onClick={() => navigate('/')}>
+                            Regresar
+                        </button>
+                        {successMessage && <p className="success">{successMessage}</p>}
+                        {errorMessage && <p className="error">{errorMessage}</p>}
+                    </div>
+                </form>
+            </div>
         </div>
     );
 }

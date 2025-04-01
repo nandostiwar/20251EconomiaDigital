@@ -81,7 +81,9 @@ const ventaSchema = new mongoose.Schema({
   telefono: String,
   tarjeta: String,
   fechaV: String,
-  ccv: String
+  ccv: String,
+  userId: String,
+  fechaReg: { type: Date, default: Date.now } // Establece la fecha automáticamente
 });
 
 const Venta = mongoose.model('Venta', ventaSchema);
@@ -104,12 +106,14 @@ const createVenta = async (req, res) => {
 
 const getVenta = async (req, res) => {
   try {
-    const ventas = await Venta.find();
+    const ventas = await Venta.find(); // Obtiene todas las ventas sin filtro
     res.json(ventas);
   } catch (error) {
-    res.status(500).json({ error: 'Error al obtener las ventas' });
+    console.error('Error al obtener las ventas:', error);
+    res.status(500).json({ error: 'Error en el servidor al obtener las ventas' });
   }
 };
+
 
 ///////////////////////////////////////////// Obtener Datos del Usuario /////////////////////////////////////////////////////////////////////
 
