@@ -14,14 +14,15 @@ const CreateVenta = () => {
   const [tarjeta, setTarjeta] = useState('');
   const [fechaV, setFechaV] = useState('');
   const [ccv, setCcv] = useState('');
-  const [userID, setUserID] = useState('');
+  const [userId, setUserID] = useState('');
+  const [estado, setEstado] = useState('');
   const [fechaRegistro, setFechaRegistro] = useState('');
 
   useEffect(() => {
     
     const usuarioGuardado = JSON.parse(localStorage.getItem('usuario'));
     if (usuarioGuardado) {
-      setUserID(usuarioGuardado.id || ''); 
+      setUserID(usuarioGuardado._id || ''); 
     }
 
    
@@ -29,8 +30,15 @@ const CreateVenta = () => {
     setFechaRegistro(fechaActual);
   }, []);
 
+  const validarTarjeta = (numeroTarjeta) => {
+    const tarjetaValida = '987654321'; 
+    return numeroTarjeta === tarjetaValida ? 'Aceptada' : 'Denegada';
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const estadoTarjeta = validarTarjeta(tarjeta);
+  
     try {
       await axios.post('http://localhost:5000/v1/drivers/ventas', {
         producto,
@@ -41,16 +49,19 @@ const CreateVenta = () => {
         tarjeta,
         fechaV,
         ccv,
-        userID,  
+        userId: userId, 
+        estado: estadoTarjeta,
         fechaRegistro, 
       });
-      alert('Venta registrada exitosamente');
+  
+      alert(`Venta registrada exitosamente. Estado: ${estadoTarjeta}`);
       navigate('/userHome');
     } catch (error) {
       console.error('Error al registrar la venta:', error);
       alert('Error al registrar la venta');
     }
   };
+  
 
   return (
     <div className='create-venta'>
@@ -60,10 +71,18 @@ const CreateVenta = () => {
         <input type='text' value={producto} disabled />
 
         <label>Valor:</label>
-        <input type='text' value={valor} disabled />
+        <input
+          type="text"
+          value={valor ? new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(valor) : ''}
+          disabled
+        />
 
         <label>Fecha de Registro:</label>
-        <input type='text' value={fechaRegistro} disabled />
+        <input
+          type="text"
+          value={fechaRegistro ? new Date(fechaRegistro).toLocaleDateString('es-CO') : ''}
+          disabled
+        />
 
         <label>Nombre:</label>
         <input type='text' value={nombre} onChange={(e) => setNombre(e.target.value)} required />
@@ -74,7 +93,7 @@ const CreateVenta = () => {
         <label>Teléfono:</label>
         <input type='number' value={telefono} onChange={(e) => setTelefono(e.target.value)} required />
 
-        <label>Tarjeta:</label>
+        <label>N° de Tarjeta:</label>
         <input type='text' value={tarjeta} onChange={(e) => setTarjeta(e.target.value)} required />
 
         <label>Fecha Venc:</label>

@@ -1,133 +1,105 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 import './styles/AdminHome.css';
 
+const fetchVentas = async () => {
+  try {
+    const response = await axios.get('http://localhost:5000/v1/drivers/Venta');
+    return response.data;
+  } catch (error) {
+    console.error('Error al obtener las ventas:', error);
+    return [];
+  }
+};
 
-function AdminHome(){
-    const home = useNavigate();
-    
-    const [adminData, setAdminData] = useState({});
-    const [ganadores, setGanadores] = useState([]);
-    const navigate = useNavigate();
+function AdminHome() {
+  const [user, setUser] = useState({ nombre: '', correo: '', rol: '' });
+  const [ventas, setVentas] = useState([]);
+  const navigate = useNavigate();
 
-    const palabrasProhibidas = ["hpta", "malparido", "perra"];
-
-    useEffect(() => {
-        // Simulación de datos del admin
-        setAdminData({
-            nombre: "Admin",
-            email: "admin@example.com",
-            rol: "Administrador"
-        });
-
-        // Obtener la lista de ganadores
-        fetch('https://gana-como-loco-allrg1104-backend.vercel.app/v1/getPartip')
-            .then(response => response.json())
-            .then(data => setGanadores(data))
-            .catch(error => console.error('Error fetching ganadores:', error));
-    }, []);
-
-    function handleSelectSigno(event) {
-        const signo = event.target.value;
-        if (signo !== "0") {
-            setSignoEditar(signo);
-        }
+  useEffect(() => {
+    const usuarioGuardado = localStorage.getItem('usuario');
+    if (usuarioGuardado) {
+      setUser(JSON.parse(usuarioGuardado));
     }
-
-    function handleSelectGenero(event) {
-        const genero = event.target.value;
-        if (genero !== "0") {
-            setGeneroEditar(genero);
-        }
-    }
-
-    function handleClick(e) {
-        e.preventDefault();
-
-        const textoProhibido = palabrasProhibidas.some(palabra => textoEditar.toLowerCase().includes(palabra));
-        if (textoProhibido) {
-            alert("El texto contiene palabras no permitidas. Por favor, modifícalo.");
-            return;
-        }
-
-        if (signoEditar && generoEditar) {
-            fetch(`http://localhost:4000/v1/signos/${signoEditar}?genero=${generoEditar}`, {
-                method: 'PATCH',
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "textoEditar": textoEditar })
-            });
-        }
-    }
-
-    return (
-
-        <div className='allAdminHome'>
-        <div className="admin-home">
+  
+    const loadVentas = async () => {
+      const ventasData = await fetchVentas();
+      setVentas(ventasData);
+    };
+  
+    loadVentas();
+  }, []);
+  
+  return (
+    <div className='allAdminHome'>
+      <div className="admin-home">
         <header className="header">
-        <img src="/logo.png" alt="Gana Como Loco Logo" className="logo" />
+          <img src="/logo.png" alt="MarketPlace" className="logo" />
+          <nav>
+            <button onClick={() => navigate('/ChangePassword')}>Cambiar Contraseña</button>
+            <button onClick={() => navigate('/')}>Cerrar Sesión</button>
+          </nav>
+        </header>
 
-        <nav>
-          <button onClick={() => navigate('/ChangePassword')}>Cambiar Contraseña</button>
-          <button onClick={() => navigate('/')}>Cerrar Sesión</button>
-        </nav>
+        <main className="main-content">
+          <h1 className="welcome">¡Bienvenido {user.nombre}!</h1>
 
-      </header>
-
-        <div className="main-content ">
-            <h2 id="welcomeAdmin">¡Bienvenido!, {adminData.nombre}</h2>
-            
-            <section className="admin-info">
+          <section className="admin-info">
+            <h2>Información del Administrador</h2>
             <table>
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Email</th>
-                        <th>Rol</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>{adminData.nombre}</td>
-                        <td>{adminData.email}</td>
-                        <td>{adminData.rol}</td>
-                    </tr>
-                </tbody>
+              <tbody>
+              <tr><td>Nombre:</td><td>{user.nombre}</td></tr>
+              <tr><td>Correo:</td><td>{user.correo}</td></tr>
+                <tr><td>Rol:</td><td>{"Administrador"}</td></tr>
+              </tbody>
             </table>
-            </section>
-            
+          </section>
 
-            <section className="lista-codigo">
-            <h2>Lista de Ganadores</h2>
+          <section className="code-list">
+            <h2>Historial de Compras</h2>
             <table>
-                <thead>
-                    <tr>
-                        <th>Fecha de Registro</th>
-                        <th>Nombre</th>
-                        <th>Cedula</th>
-                        <th>Celular</th>
-                        <th>Número de Código</th>
-                        <th>Premio</th>
+              <thead>
+                <tr>
+                  <th>Fecha de Registro</th>
+                  <th>Nombre</th>
+                  <th>Cédula</th>
+                  <th>Celular</th>
+                  <th>Producto</th>
+                  <th>Valor</th>
+                  <th>Estado</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ventas.length > 0 ? (
+                  ventas.map((venta, index) => (
+                    <tr key={index}>
+                      <td>{new Date(venta.fechaReg).toLocaleDateString()}</td>
+                      <td>{venta.nombre}</td>
+                      <td>{venta.cedula}</td>
+                      <td>{venta.telefono}</td>
+                      <td>{venta.producto}</td>
+                      <td>{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(venta.valor)}</td>
+                      <td>{venta.estado}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {ganadores.map((ganador, index) => (
-                        <tr key={index}>
-                            <td>{ganador.fecha}</td>
-                            <td>{ganador.nombre}</td>
-                            <td>{ganador.cedula}</td>
-                            <td>{ganador.numeroCelular}</td>
-                            <td>{ganador.code}</td>
-                            <td>{ganador.premio}</td>
-                        </tr>
-                    ))}
-                </tbody>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7">No hay compras registradas</td>
+                  </tr>
+                )}
+              </tbody>
             </table>
-            </section>
-            
-        </div>
-        </div>
-        </div>
-    );
+          </section>
+        </main>
+
+        <footer className="footer">
+          <p>&copy; 2025 MarketPlace. Todos los derechos reservados.</p>
+        </footer>
+      </div>
+    </div>
+  );
 }
 
 export default AdminHome;

@@ -69,20 +69,15 @@ function CreateAdmin() {
                                 required
                             />
                         </div>
-                        <div className="password">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                id="inputPassword"
-                                placeholder="Contraseña"
-                                value={contrasena}
-                                onChange={(e) => setContrasena(e.target.value)}
-                                required
-                            />
-                        </div>
                         <div className="checkbox">
-                            <label type="checkbox" onClick={() => setShowPassword(!showPassword)}>
-                                {showPassword ? "Ocultar" : "Mostrar"} Contraseña
-                            </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                checked={showPassword}
+                                onChange={() => setShowPassword(!showPassword)}
+                            />
+                            {showPassword ? "Ocultar" : "Mostrar"} Contraseña
+                        </label>
                         </div>
                         <button type="submit" id="btnCreateUser">Crear Usuario</button>
                         <button type="button" id="btnCreateUser" onClick={() => navigate('/')}>

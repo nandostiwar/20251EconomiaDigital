@@ -142,7 +142,7 @@ input[type="checkbox"]:checked {
     accent-color: #2ce9f0; /* Cambia el color del checkbox cuando está seleccionado */
 }
 
-#checkbox{
+.checkbox {
     display: flex;
     align-items: center;
     font-family: 'Arial', sans-serif;

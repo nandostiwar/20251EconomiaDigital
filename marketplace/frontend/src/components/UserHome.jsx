@@ -15,7 +15,7 @@ const fetchVentas = async () => {
 };
 
 function UserHome() {
-  const [user, setUser] = useState({ nombre: '', correo: '' });
+  const [user, setUser] = useState({ nombre: '', correo: '', _id: '' });
   const [producto, setProducto] = useState('');
   const [valor, setValor] = useState('');
   const [ventas, setVentas] = useState([]);
@@ -45,7 +45,6 @@ function UserHome() {
     <div className='allUserHome'>
       <div className="user-home">
         <header className="header">
-          <img src="/logo.png" alt="MarketPlace" className="logo" />
           <nav>
             <button onClick={() => navigate('/ChangePassword')}>Cambiar Contraseña</button>
             <button onClick={() => navigate('/')}>Cerrar Sesión</button>
@@ -71,29 +70,38 @@ function UserHome() {
             <input type="text" value={producto} onChange={(e) => setProducto(e.target.value)} required placeholder="Nuevo producto" />
 
             <label>Valor:</label>
-            <input type="text" value={valor} onChange={(e) => setValor(e.target.value)} required placeholder="Valor del producto" />
-
+            <input
+              type="text"
+              value={new Intl.NumberFormat('es-CO').format(valor)} 
+              onChange={(e) => {
+                const rawValue = e.target.value.replace(/\D/g, ""); // Elimina caracteres no numéricos
+                setValor(rawValue);
+              }}
+              required
+              placeholder="Valor del producto"
+            />
             <button onClick={handlePayment} className="submit-btn">Pagar</button>
           </section>
 
           <section className="code-list">
             <h2>Historial de Compras</h2>
             <table>
-              <thead>
-                <tr><th>Fecha de Registro</th><th>Producto</th><th>Valor</th></tr>
-              </thead>
+            <thead>
+           <tr>
+            <th>Fecha de Registro</th><th>Producto</th><th>Valor</th><th>Estado</th></tr></thead>
               <tbody>
                 {ventas.length > 0 ? (
                   ventas.map((venta, index) => (
                     <tr key={index}>
                       <td>{new Date(venta.fechaReg).toLocaleDateString()}</td>
                       <td>{venta.producto}</td>
-                      <td>{venta.valor}</td>
+                      <td>{new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(venta.valor)}</td>
+                      <td>{venta.estado}</td>
                     </tr>
                   ))
                 ) : (
                   <tr>
-                    <td colSpan="3">No hay compras registradas</td>
+                    <td colSpan="4">No hay compras registradas</td>
                   </tr>
                 )}
               </tbody>

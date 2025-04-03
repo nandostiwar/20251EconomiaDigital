@@ -83,6 +83,7 @@ const ventaSchema = new mongoose.Schema({
   fechaV: String,
   ccv: String,
   userId: String,
+  estado: String,
   fechaReg: { type: Date, default: Date.now } // Establece la fecha automáticamente
 });
 
@@ -92,15 +93,32 @@ const Venta = mongoose.model('Venta', ventaSchema);
 
 const createVenta = async (req, res) => {
   try {
-    const { producto, valor, nombre, cedula, telefono, tarjeta, fechaV, ccv } = req.body;
-    const nuevaVenta = new Venta({ producto, valor, nombre, cedula, telefono, tarjeta, fechaV, ccv });
-    
+    let { producto, valor, nombre, cedula, telefono, tarjeta, fechaV, ccv, userId } = req.body;
+
+    // Validar estado de la tarjeta en el backend (doble seguridad)
+    const tarjetaValida = '987654321';
+    const estado = tarjeta === tarjetaValida ? 'Aceptada' : 'Denegada';
+
+    const nuevaVenta = new Venta({ 
+      producto, 
+      valor, 
+      nombre, 
+      cedula, 
+      telefono, 
+      tarjeta, 
+      fechaV, 
+      ccv, 
+      userId, 
+      estado, 
+      fechaReg: new Date()
+    });
+
     await nuevaVenta.save();
     res.status(201).json(nuevaVenta);
   } catch (error) {
     res.status(500).json({ error: 'Error al crear la venta' });
   }
-}; 
+};
 
 ///////////////////////////////////////////// Obtener las Ventas /////////////////////////////////////////////////////////////////////
 
