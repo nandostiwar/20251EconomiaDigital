@@ -43,11 +43,13 @@ const SaleSchema = new mongoose.Schema({
 
 const Sale = mongoose.model('Sale', SaleSchema);
 
+
+
 // Registrar Usuario
 app.post('/users', async (req, res) => {
   try {
     const { email, password, rol } = req.body;
-    if (!email || !password || rol) {
+    if (!email || !password || !rol) {
       return res.status(400).json({ message: 'Todos los campos son obligatorios' });
     }
 
@@ -64,6 +66,7 @@ app.post('/users', async (req, res) => {
   }
 });
 
+
 // Iniciar Sesión
 app.post('/login', async (req, res) => {
   try {
@@ -72,7 +75,7 @@ app.post('/login', async (req, res) => {
     if (!user || user.password !== password) {
       return res.status(400).json({ message: 'Credenciales inválidas' });
     }
-    res.json({ message: 'Inicio de sesión exitoso', userId: user._id });
+    res.json({ message: 'Inicio de sesión exitoso', userId: user._id, rol: user.rol });
   } catch (error) {
     res.status(500).json({ message: 'Error en el login', error });
   }
