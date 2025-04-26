@@ -20,8 +20,6 @@ app.use('/v1/drivers', router);
 
 // Conexión a MongoDB
 mongoose.connect(process.env.MONGODB_URI, {
-  //useNewUrlParser: true,
-  //useUnifiedTopology: true,
 })
 .then(() => console.log('Conectado a MongoDB'))
 .catch(err => console.error('Error de conexión:', err));
